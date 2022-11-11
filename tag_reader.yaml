@@ -1,5 +1,27 @@
 esphome:
   name: nfc-tagreader
+   # Automatically add the mac address to the name
+  # so you can use a single firmware for all devices
+  name_add_mac_suffix: 'true'
+
+  # This will allow for (future) project identification,
+  # configuration and updates.
+  project:
+    name: lukasmendez.tag_reader
+    version: "1.0"
+# If buzzer is enabled, notify on api connection success
+  on_boot:
+    priority: -10
+    then:
+    - wait_until:
+        api.connected:
+    - logger.log: API is connected!
+    - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
+    - light.turn_on:
+        id: led_blue
+        flash_length: 500ms
+    - switch.turn_on: buzzer_enabled
+    - switch.turn_on: led_enabled
 
 esp8266:
   board: d1_mini
@@ -25,29 +47,6 @@ improv_serial:
 substitutions:
   name: tagreader
   friendly_name: TagReader
-
-  # Automatically add the mac address to the name
-  # so you can use a single firmware for all devices
-  name_add_mac_suffix: true
-
-  # This will allow for (future) project identification,
-  # configuration and updates.
-  project:
-    name: lukasmendez.tag_reader
-    version: "1.0"
-# If buzzer is enabled, notify on api connection success
-  on_boot:
-    priority: -10
-    then:
-    - wait_until:
-        api.connected:
-    - logger.log: API is connected!
-    - rtttl.play: "success:d=24,o=5,b=100:c,g,b"
-    - light.turn_on:
-        id: led_blue
-        flash_length: 500ms
-    - switch.turn_on: buzzer_enabled
-    - switch.turn_on: led_enabled
 
 # Define switches to control LED and buzzer from HA
 switch:
