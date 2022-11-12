@@ -218,8 +218,9 @@ button:
 
 
 i2c:
-  scan: False
-  frequency: 400kHz
+  scan: True
+  sda: D2
+  scl: D1
 
 globals:
   - id: source
